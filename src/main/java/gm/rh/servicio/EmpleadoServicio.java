@@ -12,15 +12,6 @@ import java.util.Optional;
 public class EmpleadoServicio implements IEmpleadoServicio {
     @Autowired
     private EmpleadoRepositorio repositorio;
-    @Override
-    public List<Empleado> ListarEmpleados() {
-        return repositorio.findAll();
-    }
-
-    @Override
-    public Empleado BuscarEmpleadoPorId(int id) {
-        return repositorio.findById(id).orElse(null);
-    }
 
     @Override
     public <S extends Empleado> S save(S entity) {
@@ -34,7 +25,7 @@ public class EmpleadoServicio implements IEmpleadoServicio {
 
     @Override
     public Optional<Empleado> findById(Integer integer) {
-        return Optional.empty();
+        return repositorio.findById(integer);
     }
 
     @Override
@@ -80,5 +71,15 @@ public class EmpleadoServicio implements IEmpleadoServicio {
     @Override
     public void deleteAll() {
         repositorio.deleteAll();
+    }
+
+    @Override
+    public void actualizarEstado(Integer id, Boolean estado) {
+        Optional<Empleado> empleado = repositorio.findById(id);
+        if (empleado.isPresent()) {
+            repositorio.actualizarEstado(id, estado);
+        } else {
+            throw new RuntimeException("Empleado no encontrado con ID: " + id);
+        }
     }
 }
