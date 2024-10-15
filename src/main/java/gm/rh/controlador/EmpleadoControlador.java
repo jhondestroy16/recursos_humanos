@@ -1,5 +1,6 @@
 package gm.rh.controlador;
 
+import gm.rh.dto.EmpleadoDTO;
 import gm.rh.modelo.Empleado;
 import gm.rh.servicio.EmpleadoServicio;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,9 @@ public class EmpleadoControlador {
     private EmpleadoServicio empleadoServicio;
 
     @GetMapping("/empleados")
-    public List<Empleado> obtenerEmpleados() {
-        var empleados = empleadoServicio.findAll();
-        empleados.forEach((empleado -> logger.info(empleado.toString())));
-        return (List<Empleado>) empleados;
+    public ResponseEntity<List<EmpleadoDTO>> getAllEmpleados() {
+        List<EmpleadoDTO> empleados = empleadoServicio.obtenerEmpleadosConDepartamentos();
+        return new ResponseEntity<>(empleados, HttpStatus.OK);
     }
 
     @GetMapping("/empleados/{id}")
@@ -32,14 +32,14 @@ public class EmpleadoControlador {
         return empleadoServicio.findById(id).map(p -> new ResponseEntity<>(p, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping("/empleados/save")
-    public ResponseEntity<Empleado> save(@RequestBody Empleado empleado) {
-        try{
-            return new ResponseEntity<>(empleadoServicio.save(empleado), HttpStatus.CREATED);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        @PostMapping("/empleados/save")
+        public ResponseEntity<Empleado> save(@RequestBody Empleado empleado) {
+            try{
+                return new ResponseEntity<>(empleadoServicio.save(empleado), HttpStatus.CREATED);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
-    }
 
     @PutMapping("/empleados/estado/{id}/{estado}")
     public String cambiarEstadoEmpleado(@PathVariable Integer id, @PathVariable boolean estado) {

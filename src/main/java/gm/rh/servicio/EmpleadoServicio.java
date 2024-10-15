@@ -1,5 +1,6 @@
 package gm.rh.servicio;
 
+import gm.rh.dto.EmpleadoDTO;
 import gm.rh.modelo.Empleado;
 import gm.rh.repositorio.EmpleadoRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +82,9 @@ public class EmpleadoServicio implements IEmpleadoServicio {
         } else {
             throw new RuntimeException("Empleado no encontrado con ID: " + id);
         }
+    }
+    @Override
+    public List<EmpleadoDTO> obtenerEmpleadosConDepartamentos() {
+        return repositorio.findAllEmpleadosConDepartamentos();
     }
 }

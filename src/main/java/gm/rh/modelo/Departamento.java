@@ -5,24 +5,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "departamento")
-public class Empleado {
+@ToString
+public class Departamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String nombre;
-    private Double salario;
     private Boolean estado;
 
-    @ManyToOne
-    @JoinColumn(name = "departamento", referencedColumnName = "id", insertable = true, updatable = true)
-    @JsonBackReference
-    private Departamento departamento;
+    // Relación Uno a Muchos (un departamento puede tener muchos empleados)
+    @OneToMany(mappedBy = "departamento")
+    private List<Empleado> empleados;
 }
